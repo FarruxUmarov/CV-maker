@@ -9,4 +9,9 @@ class Student extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
     use HasFactory;
+
+    public function projects(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
 }
