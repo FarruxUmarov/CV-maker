@@ -19,4 +19,9 @@ class Student extends Model
     {
         return $this->hasMany(Education::class);
     }
+
+    public function experiences(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Experience::class);
+    }
 }
