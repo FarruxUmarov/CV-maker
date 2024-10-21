@@ -9,4 +9,9 @@ class SocialNetwork extends Model
 {
     /** @use HasFactory<\Database\Factories\SocialNetworkFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'link',
+    ];
 }

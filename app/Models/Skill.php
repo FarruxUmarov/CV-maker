@@ -9,4 +9,8 @@ class Skill extends Model
 {
     /** @use HasFactory<\Database\Factories\SkillFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
 }

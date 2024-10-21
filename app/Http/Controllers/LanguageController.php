@@ -10,9 +10,9 @@ class LanguageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        //
+        return response()->json(Language::all());
     }
 
     /**
@@ -26,17 +26,30 @@ class LanguageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        //
+        $language = Language::query()->create([
+            'name' => $request['name'],
+            'level' => $request['level'],
+        ]);
+        return response()->json([
+            'message' => 'Language created successfully.',
+            'status_code' => 'success',
+            'language' => $language,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Language $language)
+    public function show(string $id ): \Illuminate\Http\JsonResponse
     {
-        //
+        $language = Language::query()->findOrFail($id);
+        return response()->json([
+            'message' => 'Language retrieved successfully.',
+            'status_code' => 'success',
+            'language' => $language,
+        ]);
     }
 
     /**
@@ -50,16 +63,31 @@ class LanguageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Language $language)
+    public function update(Request $request,  string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $language = Language::query()->findOrFail($id);
+        $language->update([
+            'name' => $request['name'],
+            'level' => $request['level'],
+        ]);
+        return response()->json([
+            'message' => 'Language updated successfully.',
+            'status_code' => 'success',
+            'language' => $language,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Language $language)
+    public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $language = Language::query()->findOrFail($id);
+        $language->delete();
+        return response()->json([
+            'message' => 'Language deleted successfully.',
+            'status_code' => 'success',
+            'language' => $language,
+        ]);
     }
 }
