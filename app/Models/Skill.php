@@ -13,4 +13,9 @@ class Skill extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function students(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'skill_student');
+    }
 }

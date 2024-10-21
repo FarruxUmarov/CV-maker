@@ -12,6 +12,11 @@ class SocialNetwork extends Model
 
     protected $fillable = [
         'name',
-        'link',
+        'link'
     ];
+
+    public function students(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'social_network_student', 'social_network_id', 'student_id');
+    }
 }

@@ -14,4 +14,9 @@ class Language extends Model
         'name',
         'level  ',
     ];
+
+    public function students(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'language_student', 'language_id', 'student_id');
+    }
 }
