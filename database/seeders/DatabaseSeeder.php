@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SocialNetwork;
 use App\Models\Student;
 use App\Models\User;
 
@@ -21,6 +22,8 @@ class DatabaseSeeder extends Seeder
             EducationSeeder::class,
             ExperienceSeeder::class,
             SkillSeeder::class,
+            SocialNetworkSeeder::class,
+            LanguageSeeder::class,
         ]);
     }
 }

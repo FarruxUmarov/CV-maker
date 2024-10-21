@@ -17,8 +17,8 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
-            'last_name' => $this->faker->lastName(),
             'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'nt_id' => $this->faker->numberBetween(10000,99999),
             'image' => null,
             'phone' => $this->faker->regexify('\+9989[0-9]{7}'),

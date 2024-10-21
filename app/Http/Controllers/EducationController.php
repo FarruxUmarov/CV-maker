@@ -12,7 +12,7 @@ class EducationController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Education::all());
     }
 
     /**
@@ -26,9 +26,21 @@ class EducationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        //
+        $education = Education::query()->create([
+            'student_id' => $request['student_id'],
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'start_date' => $request['start_date'],
+            'end_date' => $request['end_date'],
+        ]);
+
+        return response()->json([
+            'message' => 'Education created successfully.',
+            'status_code' => 'success',
+            'education' => $education
+        ]);
     }
 
     /**
@@ -50,16 +62,34 @@ class EducationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Education $education)
+    public function update(Request $request, string $id ): \Illuminate\Http\JsonResponse
     {
-        //
+        $education = Education::query()->findOrFail($id);
+        $education->update([
+            'student_id' => $request['student_id'],
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'start_date' => $request['start_date'],
+            'end_date' => $request['end_date'],
+        ]);
+        return response()->json([
+            'message' => 'Education updated successfully.',
+            'status_code' => 'success',
+            'education' => $education
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Education $education)
+    public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $education = Education::query()->findOrFail($id);
+        $education->delete();
+        return response()->json([
+            'message' => 'Education deleted successfully.',
+            'status_code' => 'success',
+            'education' => $education
+        ]);
     }
 }

@@ -10,9 +10,9 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        //
+        return response()->json(Student::all());
     }
 
     /**
@@ -26,17 +26,34 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        //
+        $student = Student::query()->create([
+            'first_name' => $request['first_name'],
+            'last_name' => $request['last_name'],
+            'nt_id' => $request['nt_id'],
+            'image' => $request['image'],
+            'phone' => $request['phone'],
+            'profession' => $request['profession'],
+            'biography' => $request['biography'],
+        ]);
+
+        $token = $student->createToken($student->first_name)->plainTextToken;
+
+        return response()->json([
+            'message' => 'Student created successfully',
+            'status' => 'success',
+            'token' => $token,
+            'student' => $student,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        return response()->json(Student::query()->findOrFail($id));
     }
 
     /**
@@ -50,16 +67,41 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $student = Student::query()->findOrFail($id);
+
+        $student->update([
+            'first_name' => $request['first_name'],
+            'last_name' => $request['last_name'],
+            'nt_id' => $request['nt_id'],
+            'image' => $request['image'],
+            'phone' => $request['phone'],
+            'profession' => $request['profession'],
+            'biography' => $request['biography'],
+        ]);
+
+        $token = $student->createToken($student->first_name)->plainTextToken;
+
+        return response()->json([
+            'message' => 'Student updated successfully',
+            'status' => 'success',
+            'token' => $token,
+            'student' => $student,
+        ]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $student = Student::query()->findOrFail($id);
+        $student->delete();
+        return response()->json([
+            'message' => 'Student deleted successfully',
+            'status' => 'success',
+        ]);
     }
 }
