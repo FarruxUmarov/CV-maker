@@ -11,7 +11,7 @@ class Experience extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
+        'user_id',
         'name',
         'position',
         'description',

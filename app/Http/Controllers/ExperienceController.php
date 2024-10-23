@@ -29,11 +29,22 @@ class ExperienceController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        $experience = Education::query()->create([
-            'student_id' => $request['student_id'],
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'position' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'start_date' => 'required|date|date_format:Y-m-d',
+            'end_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:start_date',
+        ]);
+
+
+        $experience = Experience::query()->create([
+            'user_id' => $request['user_id'],
             'name' => $request['name'],
             'position' => $request['position'],
-            'designation' => $request['designation'],
+            'description' => $request['description'],
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
         ]);
@@ -42,7 +53,7 @@ class ExperienceController extends Controller
            'message' => 'Experience added successfully',
            'status_code' => 'success',
            'data' => $experience
-       ]);
+       ], 201);
     }
 
     /**
@@ -71,12 +82,22 @@ class ExperienceController extends Controller
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'position' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'start_date' => 'required|date|date_format:Y-m-d',
+            'end_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:start_date',
+        ]);
+
         $experience = Experience::query()->findOrFail($id);
+
         $experience->update([
-            'student_id' => $request['student_id'],
+            'user_id' => $request['user_id'],
             'name' => $request['name'],
             'position' => $request['position'],
-            'designation' => $request['designation'],
+            'description' => $request['description'],
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
         ]);
@@ -98,6 +119,6 @@ class ExperienceController extends Controller
             'message' => 'Experience deleted successfully',
             'status_code' => 'success',
             'data' => $experience
-        ]);
+        ], 204);
     }
 }
