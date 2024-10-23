@@ -28,6 +28,12 @@ class SocialNetworkController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+
+        $validated = $request->validate([
+            'name' => 'required|unique:social_networks|max:255',
+            'link' => 'required|url|max:255',
+        ]);
+
         $social_network = SocialNetwork::query()->create([
             'name' => $request['name'],
             'link' => $request['link'],
@@ -37,7 +43,7 @@ class SocialNetworkController extends Controller
             'message' => 'Social network created successfully.',
             'status_code' => 'success',
             'social_network' => $social_network
-        ]);
+        ], 201);
     }
 
     /**
@@ -45,13 +51,19 @@ class SocialNetworkController extends Controller
      */
     public function show(string $id): \Illuminate\Http\JsonResponse
     {
-        $social_network = SocialNetwork::query()->find($id);
+        $social_network = SocialNetwork::find($id);
+
+        if (!$social_network) {
+            return response()->json(['message' => 'Social network not found.'], 404);
+        }
+
         return response()->json([
             'message' => 'Social network retrieved successfully.',
             'status_code' => 'success',
             'social_network' => $social_network
         ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -66,7 +78,14 @@ class SocialNetworkController extends Controller
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
+
+        $validated = $request->validate([
+            'name' => 'required|unique:social_networks|max:255',
+            'link' => 'required|url|max:255',
+        ]);
+
         $social_network = SocialNetwork::query()->find($id);
+
         $social_network->update([
             'name' => $request['name'],
             'link' => $request['link'],
@@ -84,11 +103,17 @@ class SocialNetworkController extends Controller
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
         $social_network = SocialNetwork::query()->find($id);
+
+        if(!$social_network){
+            return response()->json(['message' => 'Social network not found.'], 404);
+        }
         $social_network->delete();
+
+
         return response()->json([
             'message' => 'Social network deleted successfully.',
             'status_code' => 'success',
             'social_network' => $social_network
-        ]);
+        ], 204);
     }
 }
