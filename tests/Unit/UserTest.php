@@ -20,15 +20,15 @@ class UserTest extends TestCase
         Sanctum::actingAs($user);
     }
 
-//    public function test_index_returns_successful_response()
-//    {
-//        User::factory(3)->create();
-//
-//        $response = $this->getJson('/api/users');
-//
-//        $response->assertStatus(200)
-//            ->assertJsonCount(3);
-//    }
+    public function test_index_returns_successful_response()
+    {
+        User::factory(3)->create();
+
+        $response = $this->getJson('/api/users');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(4);
+    }
 
     public function test_store_creates_new_user()
     {

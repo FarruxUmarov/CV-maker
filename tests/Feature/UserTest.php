@@ -4,30 +4,34 @@ namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+    }
 
     /**
      * A basic test example.
      */
-//    public function test_index_returns_successful_response()
-//    {
-//        User::factory(3)->create();
-//
-//        $response = $this->getJson('/api/users');
-//
-//        $response->assertStatus(200)
-//            ->assertJsonCount(3);
-//    }
+    public function test_index_returns_successful_response()
+    {
+        User::factory(3)->create();
+
+        $response = $this->getJson('/api/users');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(4);
+    }
 
     public function test_store_creates_new_user()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
-
         $response = $this->postJson('/api/users', [
             'last_name' => 'New User',
             'first_name' => 'John',
@@ -46,10 +50,6 @@ class UserTest extends TestCase
 
     public function test_store_fails_with_invalid_data()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
-
         $response = $this->postJson('/api/users', [
             'first_name' => '',
         ]);
@@ -59,9 +59,6 @@ class UserTest extends TestCase
 
     public function test_show_returns_user()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
 
         $user = User::factory()->create();
 
@@ -73,10 +70,6 @@ class UserTest extends TestCase
 
     public function test_show_fails_for_nonexistent_user()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
-
         $response = $this->getJson('/api/users/999');
 
         $response->assertStatus(404);
@@ -84,9 +77,6 @@ class UserTest extends TestCase
 
     public function test_update_modifies_existing_user()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
 
         $user = User::factory()->create();
 
@@ -108,10 +98,6 @@ class UserTest extends TestCase
 
     public function test_update_fails_with_invalid_data()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
-
         $user = User::factory()->create();
 
         $response = $this->putJson("/api/users/{$user->id}", [
@@ -124,10 +110,6 @@ class UserTest extends TestCase
 
     public function test_destroy_removes_user()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
-
         $user = User::factory()->create();
 
         $response = $this->deleteJson("/api/users/{$user->id}");
@@ -138,10 +120,6 @@ class UserTest extends TestCase
 
     public function test_destroy_fails_for_nonexistent_user()
     {
-        $admin = User::factory()->create();
-
-        $this->actingAs($admin);
-
         $response = $this->deleteJson('/api/users/999');
 
         $response->assertStatus(404);

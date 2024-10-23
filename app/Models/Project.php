@@ -11,7 +11,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
+        'user_id',
         'name',
         'description',
         'source_link',
@@ -20,6 +20,6 @@ class Project extends Model
 
     public function student(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(User::class);
     }
 }

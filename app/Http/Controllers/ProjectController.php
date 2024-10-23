@@ -28,18 +28,27 @@ class ProjectController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        $project = Project::query()->create([
-            'student_id' => $request->student_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'source_link' => $request->source_link,
-            'demo_link' => $request->demo_link,
+        $validate = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'source_link' => 'required|url',
+            'demo_link' => 'required|url',
         ]);
+
+        $project = Project::query()->create([
+            'user_id' => $request['user_id'],
+            'name' => $request['name'],
+            'description' => $request['description'],
+            'source_link' => $request['source_link'],
+            'demo_link' => $request['demo_link'],
+        ]);
+
         return response()->json([
             'message' => 'Project created successfully',
             'status_code' => 'success',
-            'project' => $project,
-        ]);
+            'project' => $project
+        ],201);
     }
 
     /**
@@ -68,9 +77,19 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
     {
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'source_link' => 'required|url',
+            'demo_link' => 'required|url',
+        ]);
+
         $project = Project::query()->findOrFail($id);
+
         $project->update([
-            'student_id' => $request->student_id,
+            'user_id' => $request->user_id,
             'name' => $request->name,
             'description' => $request->description,
             'source_link' => $request->source_link,
@@ -79,7 +98,7 @@ class ProjectController extends Controller
         return response()->json([
             'message' => 'Project updated successfully',
             'status_code' => 'success',
-            'project' => $project,
+            'project' => $project
         ]);
     }
 
@@ -93,6 +112,6 @@ class ProjectController extends Controller
         return response()->json([
             'message' => 'Project deleted successfully',
             'status_code' => 'success',
-        ]);
+        ],204);
     }
 }
