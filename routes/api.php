@@ -16,12 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/users', UserController::class)->middleware('auth:sanctum');
 Route::resource('/projects', ProjectController::class)->middleware('auth:sanctum');
-Route::resource('/educations', EducationController::class)->middleware('auth:sanctum');
-Route::resource('/experiences', ExperienceController::class)->middleware('auth:sanctum');
-Route::resource('/languages', LanguageController::class)->middleware('auth:sanctum');
-Route::resource('/skills', SkillController::class)->middleware('auth:sanctum');
-Route::resource('/social_networks', SocialNetworkController::class)->middleware('auth:sanctum');
 Route::resource('/skills', SkillController::class)->middleware('auth:sanctum');
 Route::resource('/languages', LanguageController::class)->middleware('auth:sanctum');
 Route::resource('/socialNetworks', SocialNetworkController::class)->middleware('auth:sanctum');
 Route::resource('/experiences', ExperienceController::class)->middleware('auth:sanctum');
+Route::resource('/educations', EducationController::class)->middleware('auth:sanctum');
+

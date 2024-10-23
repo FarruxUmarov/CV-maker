@@ -28,8 +28,16 @@ class EducationController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'start_date' => 'required|date|date_format:Y-m-d',
+            'end_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:start_date',
+        ]);
+
         $education = Education::query()->create([
-            'student_id' => $request['student_id'],
+            'user_id' => $request['user_id'],
             'name' => $request['name'],
             'description' => $request['description'],
             'start_date' => $request['start_date'],
@@ -40,15 +48,20 @@ class EducationController extends Controller
             'message' => 'Education created successfully.',
             'status_code' => 'success',
             'education' => $education
-        ]);
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Education $education)
+    public function show(string $id): \Illuminate\Http\JsonResponse
     {
-        //
+        $education = Education::query()->findOrFail($id);
+        return response()->json([
+            'message' => 'Education retrieved successfully.',
+            'status_code' => 'success',
+            'education' => $education
+        ]);
     }
 
     /**
@@ -64,9 +77,17 @@ class EducationController extends Controller
      */
     public function update(Request $request, string $id ): \Illuminate\Http\JsonResponse
     {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'start_date' => 'required|date|date_format:Y-m-d',
+            'end_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:start_date',
+        ]);
+
         $education = Education::query()->findOrFail($id);
         $education->update([
-            'student_id' => $request['student_id'],
+            'user_id' => $request['user_id'],
             'name' => $request['name'],
             'description' => $request['description'],
             'start_date' => $request['start_date'],
@@ -90,6 +111,6 @@ class EducationController extends Controller
             'message' => 'Education deleted successfully.',
             'status_code' => 'success',
             'education' => $education
-        ]);
+        ],204);
     }
 }

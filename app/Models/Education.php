@@ -11,7 +11,7 @@ class Education extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id',
+        'user_id',
         'name',
         'description',
         'start_date',
@@ -20,6 +20,6 @@ class Education extends Model
 
     public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(User::class);
     }
 }
