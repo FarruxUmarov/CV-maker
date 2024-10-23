@@ -21,3 +21,4 @@ Route::resource('/experiences', ExperienceController::class)->middleware('auth:s
 Route::resource('/languages', LanguageController::class)->middleware('auth:sanctum');
 Route::resource('/skills', SkillController::class)->middleware('auth:sanctum');
 Route::resource('/social_networks', SocialNetworkController::class)->middleware('auth:sanctum');
+Route::resource('/skills', SkillController::class)->middleware('auth:sanctum');
