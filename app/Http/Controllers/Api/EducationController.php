@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Education;
-use App\Models\Experience;
 use Illuminate\Http\Request;
 
-class ExperienceController extends Controller
+class EducationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index()
     {
-        return response()->json(Experience::all());
+        return response()->json(Education::all());
     }
 
     /**
@@ -29,31 +29,27 @@ class ExperienceController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'start_date' => 'required|date|date_format:Y-m-d',
             'end_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:start_date',
         ]);
 
-
-        $experience = Experience::query()->create([
+        $education = Education::query()->create([
             'user_id' => $request['user_id'],
             'name' => $request['name'],
-            'position' => $request['position'],
             'description' => $request['description'],
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
         ]);
 
-       return response()->json([
-           'message' => 'Experience added successfully',
-           'status_code' => 'success',
-           'data' => $experience
-       ], 201);
+        return response()->json([
+            'message' => 'Education created successfully.',
+            'status_code' => 'success',
+            'education' => $education
+        ], 201);
     }
 
     /**
@@ -61,18 +57,18 @@ class ExperienceController extends Controller
      */
     public function show(string $id): \Illuminate\Http\JsonResponse
     {
-        $experience = Experience::query()->findOrFail($id);
+        $education = Education::query()->findOrFail($id);
         return response()->json([
-            'message' => 'Experience retrieved successfully',
+            'message' => 'Education retrieved successfully.',
             'status_code' => 'success',
-            'data' => $experience
+            'education' => $education
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Experience $experience)
+    public function edit(Education $education)
     {
         //
     }
@@ -80,31 +76,28 @@ class ExperienceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, string $id ): \Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'start_date' => 'required|date|date_format:Y-m-d',
             'end_date' => 'nullable|date|date_format:Y-m-d|after_or_equal:start_date',
         ]);
 
-        $experience = Experience::query()->findOrFail($id);
-
-        $experience->update([
+        $education = Education::query()->findOrFail($id);
+        $education->update([
             'user_id' => $request['user_id'],
             'name' => $request['name'],
-            'position' => $request['position'],
             'description' => $request['description'],
             'start_date' => $request['start_date'],
             'end_date' => $request['end_date'],
         ]);
         return response()->json([
-            'message' => 'Experience updated successfully',
+            'message' => 'Education updated successfully.',
             'status_code' => 'success',
-            'data' => $experience
+            'education' => $education
         ]);
     }
 
@@ -113,12 +106,12 @@ class ExperienceController extends Controller
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        $experience = Experience::query()->findOrFail($id);
-        $experience->delete();
+        $education = Education::query()->findOrFail($id);
+        $education->delete();
         return response()->json([
-            'message' => 'Experience deleted successfully',
+            'message' => 'Education deleted successfully.',
             'status_code' => 'success',
-            'data' => $experience
-        ], 204);
+            'education' => $education
+        ],204);
     }
 }
