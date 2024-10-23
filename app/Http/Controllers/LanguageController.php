@@ -28,6 +28,11 @@ class LanguageController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
+        $validated = $request->validate([
+            'name' => 'required|unique:languages',
+            'level' => 'required|in:A1,A2,B1,B2,C1,C2'
+        ]);
+
         $language = Language::query()->create([
             'name' => $request['name'],
             'level' => $request['level'],
@@ -36,7 +41,7 @@ class LanguageController extends Controller
             'message' => 'Language created successfully.',
             'status_code' => 'success',
             'language' => $language,
-        ]);
+        ], 201);
     }
 
     /**
@@ -65,6 +70,11 @@ class LanguageController extends Controller
      */
     public function update(Request $request,  string $id): \Illuminate\Http\JsonResponse
     {
+        $validated = $request->validate([
+            'name' => 'required|unique:languages',
+            'level' => 'required|in:A1,A2,B1,B2,C1,C2'
+        ]);
+
         $language = Language::query()->findOrFail($id);
         $language->update([
             'name' => $request['name'],
@@ -88,6 +98,6 @@ class LanguageController extends Controller
             'message' => 'Language deleted successfully.',
             'status_code' => 'success',
             'language' => $language,
-        ]);
+        ],204);
     }
 }
