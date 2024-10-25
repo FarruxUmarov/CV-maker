@@ -45,5 +45,9 @@ jobs:
                 host: ${{ secrets.HOST }}
                 username: ${{ secrets.USERNAME }}
                 password: ${{ secrets.PASSWORD }}
-                script: whoami
+                script:
+                  cd CV_maker
+                  git pull
+                  docker compose -f docker-compose.production.yml up --build -d
+                  docker exec laravel_app php artisan optimize
 
