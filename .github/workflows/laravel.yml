@@ -47,7 +47,7 @@ jobs:
                 password: ${{ secrets.PASSWORD }}
                 script: |
                   set -e
-                  cd CV-maker
+                  cd CV-maker/
                   git pull
                   docker compose -f docker-compose.production.yml up --build -d
                   docker exec laravel_app php artisan optimize
